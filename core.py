@@ -2,8 +2,19 @@ import traceback
 import json
 from valclient.client import Client
 from colorama import init, Fore, Style
+import subprocess
+import time
 
 init(autoreset=True)
+
+
+def is_val_running():
+    valorant_process = "VALORANT.exe"
+    call = 'TASKLIST', '/FI', f'imagename eq {valorant_process}'
+    output = subprocess.check_output(call).decode()
+    last_line = output.strip().split('\r\n')[-1]
+    return last_line.lower().startswith(valorant_process.lower())
+    
 
 banner = r"""
                     ..
@@ -37,6 +48,12 @@ while region not in allowed_regions:
     print(f"{err_region}")
     region = input(f"{req_region}").lower()
     
+while not is_val_running():
+    print(f"{Fore.RED} Valorant is not running.")
+    time.sleep(1)
+    if is_val_running():
+        break
+
 client = Client(region = region)
 client.activate()
 valid = False
