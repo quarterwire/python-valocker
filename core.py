@@ -4,25 +4,40 @@ from valclient.client import Client
 from colorama import init, Fore, Style
 import subprocess
 import time
+import os
+import shutil
 
 init(autoreset=True)
+os.system('cls' if os.name == 'nt' else 'clear')
 
+def print_centre(s, end=None):
+    terminal_width = shutil.get_terminal_size().columns
+    for line in s.splitlines():
+        left_padding = (terminal_width - len(line)) // 2
+        print(' ' * left_padding + line, end=end)
 
+    
 def is_val_running():
     valorant_process = "VALORANT.exe"
     call = 'TASKLIST', '/FI', f'imagename eq {valorant_process}'
     output = subprocess.check_output(call).decode()
     last_line = output.strip().split('\r\n')[-1]
     return last_line.lower().startswith(valorant_process.lower())
+
+def colored_input(cmd_color, input_color, message):
+    print_centre(f'{cmd_color} {message}', end='')
+    return_input = input(f"{Style.BRIGHT}{input_color}").lower()
+    return return_input
+    
     
 
-banner = r"""
-                    ..
-                   ( '`<
-                    )(
-             (  ----'  '.
-             (         ;
-              (_______,' 
+banner ="""
+          ..
+         ( '`<
+         )(
+ (  ----'  '.
+(         ;
+(_______,' 
 ^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^^~^~^
 """
 
@@ -31,25 +46,26 @@ banner = r"""
 allowed_regions = ['na', 'eu', 'latam', 'br', 'ap', 'kr', 'pbe']
 
 main = f"{Style.BRIGHT}{Fore.MAGENTA} Valorant Agent Locker by quarterwire."
-req_region = f"{Fore.RED} Enter Region (EU/NA) : "
-req_agent = f"{Fore.RED} Agent (e.g Jett) : "
+req_region = f"Enter region (EU/NA) : "
+req_agent = f"Select your agent (e.g Jett) : "
 err_agent = f"{Fore.YELLOW} Invalid agent name."
 err_region = f"{Fore.YELLOW} Region not matching with any {'/'.join([r.upper() for r in allowed_regions])}."
-waiting = f"{Fore.GREEN} Waiting for Agent Select screen."
+waiting = f"{Fore.GREEN} Waiting for agent select screen."
 game_found =f'{Fore.GREEN} Agent Selection was found.'
 
 
-print(f"{Style.BRIGHT} {Fore.GREEN} {banner}")
-print(main)
+print_centre(f"{Style.BRIGHT}{Fore.GREEN}{banner}")
+print_centre(main)
 
-region = input(f"{req_region}").lower()
+
+region = colored_input(Fore.BLUE, Fore.WHITE, req_region)
 
 while region not in allowed_regions:
-    print(f"{err_region}")
+    print_centre(f"{err_region}")
     region = input(f"{req_region}").lower()
     
 while not is_val_running():
-    print(f"{Fore.RED} Valorant is not running.")
+    print_centre(f"{Fore.RED} Valorant is not running.")
     time.sleep(1)
     if is_val_running():
         break
@@ -65,24 +81,24 @@ with open("agentIds.json", "r") as f:
         
 while not valid:
     try:
-        pref_agent = input(f"{req_agent}").lower()
+        pref_agent = colored_input(Fore.BLUE, Fore.WHITE, req_agent)
         if pref_agent in agents["agents"].keys():
             valid = True
         else:
-            print(f"{err_agent}")
+            print_centre(f"{err_agent}")
     except Exception:
-        print(f'{traceback.format_exc()}')
+        print_centre(f'{traceback.format_exc()}')
         
-print(f"{Fore.YELLOW} Waiting for Agent Selection")
+print_centre(f"{Fore.YELLOW} Waiting for Agent Selection")
 while True:
     try:
         sessionState = client.fetch_presence(client.puuid)['sessionLoopState']
         if sessionState == "PREGAME" and client.pregame_fetch_match()['ID'] not in past_matches:
-            print(game_found)
+            print_centre(game_found)
             client.pregame_select_character(agents['agents'][pref_agent])
             client.pregame_lock_character(agents['agents'][pref_agent])
             past_matches.append(client.pregame_fetch_match()['ID'])
-            print(f"{Fore.LIGHTWHITE_EX}{pref_agent.capitalize()} Locked Successfully")
+            print_centre(f"{Fore.LIGHTWHITE_EX}{pref_agent.capitalize()} Locked Successfully")
     except Exception:
         pass
 
