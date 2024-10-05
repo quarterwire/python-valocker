@@ -1,0 +1,29 @@
+[33mcommit 17d4244c5af0c81a29529c7c7ee846dc47a16bc2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: quarterwire <watcher.alex0411@gmail.com>
+Date:   Sat Oct 5 16:28:29 2024 +0300
+
+    stylized the cmd output
+
+[33mcommit 02b28fd0b02e30017b2a192d9cd27a639eecac79[m
+Author: quarterwire <watcher.alex0411@gmail.com>
+Date:   Sat Oct 5 14:18:19 2024 +0300
+
+    added a check function for valorant instance be running before running everything else
+
+[33mcommit 594647e4adcc6f181040b9fa5b996e1995c8eee0[m
+Author: quarterwire <watcher.alex0411@gmail.com>
+Date:   Sat Oct 5 05:20:25 2024 +0300
+
+    .venv
+
+[33mcommit 7574c48d9ff2a480e8134e9bc5e6328d8e4361e4[m
+Author: quarterwire <watcher.alex0411@gmail.com>
+Date:   Sat Oct 5 05:18:58 2024 +0300
+
+    .venv
+
+[33mcommit a770690f16623e09b88793b730d72a814522c73f[m
+Author: quarterwire <watcher.alex0411@gmail.com>
+Date:   Sat Oct 5 05:15:36 2024 +0300
+
+    first commit
